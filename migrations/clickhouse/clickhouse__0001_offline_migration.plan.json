@@ -1,0 +1,12 @@
+{
+  "migration_id": "clickhouse__0001_offline_migration",
+  "operations": [
+    {
+      "type": "create_table",
+      "table": "repo",
+      "severity": "INFO"
+    }
+  ],
+  "required_flags": [],
+  "checksum": "1ed6799c93d8779c7c3d6ef3e84ba27e18c4e6572e144bee7c8c6b49ddfc0291"
+}

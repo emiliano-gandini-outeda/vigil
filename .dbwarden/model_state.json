@@ -1,0 +1,255 @@
+{
+  "format_version": 2,
+  "exported_at": "2026-06-12T01:32:15Z",
+  "dbwarden_version": "0.11.1",
+  "tables": {
+    "commits": {
+      "name": "commits",
+      "columns": {
+        "repo": {
+          "name": "repo",
+          "type": "NULL",
+          "nullable": false,
+          "primary_key": true,
+          "unique": null,
+          "default": null,
+          "foreign_key": "repos(name)",
+          "comment": null,
+          "autoincrement": "auto",
+          "pg_column": {},
+          "ch_column": {
+            "ch_type": "NULL"
+          }
+        },
+        "sha": {
+          "name": "sha",
+          "type": "VARCHAR",
+          "nullable": false,
+          "primary_key": false,
+          "unique": null,
+          "default": null,
+          "foreign_key": null,
+          "comment": null,
+          "autoincrement": "auto",
+          "pg_column": {},
+          "ch_column": {
+            "ch_type": "String"
+          }
+        },
+        "author_login": {
+          "name": "author_login",
+          "type": "VARCHAR",
+          "nullable": false,
+          "primary_key": false,
+          "unique": null,
+          "default": null,
+          "foreign_key": null,
+          "comment": null,
+          "autoincrement": "auto",
+          "pg_column": {},
+          "ch_column": {
+            "ch_type": "String"
+          }
+        },
+        "author_name": {
+          "name": "author_name",
+          "type": "VARCHAR",
+          "nullable": false,
+          "primary_key": false,
+          "unique": null,
+          "default": null,
+          "foreign_key": null,
+          "comment": null,
+          "autoincrement": "auto",
+          "pg_column": {},
+          "ch_column": {
+            "ch_type": "String"
+          }
+        },
+        "author_email": {
+          "name": "author_email",
+          "type": "VARCHAR",
+          "nullable": false,
+          "primary_key": false,
+          "unique": null,
+          "default": null,
+          "foreign_key": null,
+          "comment": null,
+          "autoincrement": "auto",
+          "pg_column": {},
+          "ch_column": {
+            "ch_type": "String"
+          }
+        },
+        "message": {
+          "name": "message",
+          "type": "VARCHAR",
+          "nullable": true,
+          "primary_key": false,
+          "unique": null,
+          "default": null,
+          "foreign_key": null,
+          "comment": null,
+          "autoincrement": "auto",
+          "pg_column": {},
+          "ch_column": {
+            "ch_type": "String"
+          }
+        },
+        "committed_at": {
+          "name": "committed_at",
+          "type": "DATETIME",
+          "nullable": false,
+          "primary_key": false,
+          "unique": null,
+          "default": null,
+          "foreign_key": null,
+          "comment": null,
+          "autoincrement": "auto",
+          "pg_column": {},
+          "ch_column": {
+            "ch_type": "DateTime64(3)"
+          }
+        }
+      },
+      "indexes": [],
+      "foreign_keys": [
+        {
+          "columns": [
+            "repo"
+          ],
+          "referred_table": "repos",
+          "referred_columns": [
+            "name"
+          ]
+        }
+      ],
+      "checks": [],
+      "uniques": [],
+      "comment": "Commit event store",
+      "object_type": "table",
+      "backend": "clickhouse",
+      "backend_table_spec": {
+        "backend": "clickhouse",
+        "ch_engine_raw": {
+          "name": "MergeTree"
+        },
+        "ch_engine": [
+          "MergeTree"
+        ],
+        "ch_order_by": [
+          "repo",
+          "committed_at"
+        ],
+        "ch_primary_key": "repo",
+        "ch_object_type": "table",
+        "ch_projections": []
+      }
+    },
+    "repos": {
+      "name": "repos",
+      "columns": {
+        "name": {
+          "name": "name",
+          "type": "VARCHAR",
+          "nullable": false,
+          "primary_key": true,
+          "unique": null,
+          "default": null,
+          "foreign_key": null,
+          "comment": null,
+          "autoincrement": "auto",
+          "pg_column": {},
+          "ch_column": {
+            "ch_type": "String"
+          }
+        },
+        "owner": {
+          "name": "owner",
+          "type": "VARCHAR",
+          "nullable": false,
+          "primary_key": false,
+          "unique": null,
+          "default": null,
+          "foreign_key": null,
+          "comment": null,
+          "autoincrement": "auto",
+          "pg_column": {},
+          "ch_column": {
+            "ch_type": "String"
+          }
+        },
+        "is_org": {
+          "name": "is_org",
+          "type": "BOOLEAN",
+          "nullable": false,
+          "primary_key": false,
+          "unique": null,
+          "default": null,
+          "foreign_key": null,
+          "comment": null,
+          "autoincrement": "auto",
+          "pg_column": {},
+          "ch_column": {
+            "ch_type": "Bool"
+          }
+        },
+        "default_branch": {
+          "name": "default_branch",
+          "type": "VARCHAR",
+          "nullable": false,
+          "primary_key": false,
+          "unique": null,
+          "default": null,
+          "foreign_key": null,
+          "comment": null,
+          "autoincrement": "auto",
+          "pg_column": {},
+          "ch_column": {
+            "ch_type": "String"
+          }
+        }
+      },
+      "indexes": [],
+      "foreign_keys": [],
+      "checks": [],
+      "uniques": [],
+      "comment": "Repo store",
+      "object_type": "table",
+      "backend": "clickhouse",
+      "backend_table_spec": {
+        "backend": "clickhouse",
+        "ch_engine_raw": {
+          "name": "ReplacingMergeTree"
+        },
+        "ch_engine": [
+          "ReplacingMergeTree"
+        ],
+        "ch_order_by": [
+          "name"
+        ],
+        "ch_primary_key": "name",
+        "ch_object_type": "table",
+        "ch_projections": []
+      }
+    }
+  },
+  "indexes": {},
+  "constraints": {
+    "commits:foreign_key:0": {
+      "type": "foreign_key",
+      "table": "commits",
+      "columns": [
+        "repo"
+      ],
+      "referenced_table": "repos",
+      "referenced_columns": [
+        "name"
+      ],
+      "on_delete": "NO ACTION",
+      "on_update": "NO ACTION",
+      "deferrable": false
+    }
+  },
+  "enums": {}
+}
