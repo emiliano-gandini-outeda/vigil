@@ -3,10 +3,15 @@
   "operations": [
     {
       "type": "create_table",
-      "table": "repo",
+      "table": "commits",
+      "severity": "INFO"
+    },
+    {
+      "type": "create_table",
+      "table": "repos",
       "severity": "INFO"
     }
   ],
   "required_flags": [],
-  "checksum": "1ed6799c93d8779c7c3d6ef3e84ba27e18c4e6572e144bee7c8c6b49ddfc0291"
+  "checksum": "2bcc4dacef6427f9290fc6a6e73cc3e5eb7ceafda19549caa175c41176e97b20"
 }
