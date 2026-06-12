@@ -2,7 +2,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import String, DateTime, ForeignKey
 from datetime import datetime
 from dbwarden.schema import auto_schema
-from dbwarden import ChEngineSpec
+from dbwarden import CHTableMeta, ChEngineSpec
 
 from app.core.databases import Base
 
@@ -18,7 +18,7 @@ class Commit(Base):
     message : Mapped[str] = mapped_column(String, nullable=True)
     committed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
-    class Meta:
+    class Meta(CHTableMeta):
         ch_engine = ChEngineSpec("MergeTree")
         ch_order_by = ["repo", "committed_at"]
         ch_primary_key = "repo"

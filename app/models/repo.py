@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import String, Boolean
 from dbwarden.schema import auto_schema
-from dbwarden import ChEngineSpec
+from dbwarden import CHTableMeta, ChEngineSpec
 
 from app.core.databases import Base
 
@@ -14,7 +14,7 @@ class Repo(Base):
     is_org : Mapped[bool] = mapped_column(Boolean, nullable=False)
     default_branch : Mapped[str] = mapped_column(String, nullable=False)
 
-    class Meta:
+    class Meta(CHTableMeta):
         ch_engine = ChEngineSpec("ReplacingMergeTree")
         ch_order_by = ["name"]
         ch_primary_key = "name"
