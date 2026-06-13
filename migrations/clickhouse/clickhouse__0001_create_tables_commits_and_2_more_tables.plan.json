@@ -1,0 +1,22 @@
+{
+  "migration_id": "clickhouse__0001_create_tables_commits_and_2_more_tables",
+  "operations": [
+    {
+      "type": "create_table",
+      "table": "commits",
+      "severity": "INFO"
+    },
+    {
+      "type": "create_table",
+      "table": "repos",
+      "severity": "INFO"
+    },
+    {
+      "type": "create_table",
+      "table": "sync_state",
+      "severity": "INFO"
+    }
+  ],
+  "required_flags": [],
+  "checksum": "0c262a33951293662cfef4bf41f9947671214c8637d72af48b57d29fa60ede67"
+}
