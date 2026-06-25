@@ -20,8 +20,8 @@ def get_repo_handle(client :  Github, repo_name : str):
 def get_clickhouse_client():
     return clickhouse_connect.get_client(
         host=settings.clickhouse_host,
-        port=settings.clickhouse_port,
+        port=settings.clickhouse_http_port,
         username=settings.clickhouse_user,
         password=settings.clickhouse_password,
-        database=settings.clickhouse_database,
+        database=settings.clickhouse_db,
     )

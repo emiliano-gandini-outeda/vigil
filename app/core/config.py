@@ -32,7 +32,7 @@ class Settings:
     def clickhouse_http_url(self) -> str:
         return (
             f"http://{self.clickhouse_user}:{self.clickhouse_password}"
-            f"@{self.clickhouse_host}:{self.clickhouse_http_port}"
+            f"@{self.clickhouse_host}:{self.clickhouse_http_port}/{self.clickhouse_db}"
         )
 
     @property
@@ -44,7 +44,10 @@ class Settings:
 
     @property
     def clickhouse_async_url(self) -> str:
-        return self.clickhouse_http_url
+        return (
+            f"http://{self.clickhouse_user}:{self.clickhouse_password}"
+            f"@{self.clickhouse_host}:{self.clickhouse_http_port}/{self.clickhouse_db}"
+        )
 
 
 settings = Settings()
