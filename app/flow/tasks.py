@@ -1,12 +1,17 @@
 from prefect import task, get_run_logger
 from dataclasses import dataclass
 from datetime import datetime
+from github import RateLimitExceededException
+from prefect.tasks import exponential_backoff
 
-from app.services.client import get_clickhouse_client, get_repo_handle
+from app.services.client import get_clickhouse_client, get_repo_handle, github_session
+from app.services.commits import extract_commit_data
+from app.models.commit import Commit
 
 @dataclass(frozen=True)
 class RepoRecord:
-    full_name: str
+    name: str
+    owner: str
     default_branch: str
 
 @task
@@ -17,26 +22,26 @@ def load_active_repos():
 
     try:
         result = client.query(
-            "SELECT name, default_branch FROM repos"
+            "SELECT name, owner, default_branch FROM repos"
         )
     
     finally:
         client.close()
     
-    repos = [RepoRecord(name=row[0], default_branch=row[1]) for row in result.result_rows]
+    repos = [RepoRecord(name=row[0], owner=row[1], default_branch=row[2]) for row in result.result_rows]
     
     log.info(f"Loaded {len(repos)} active repos")
     return repos
 
 @task
 def get_sync_state(repo_name : str):
-    log = get_run_logger()
 
     client = get_clickhouse_client()
 
     try:
         result = client.query(
-            f"SELECT last_synced_at, last_synced_sha FROM sync_state WHERE repo = {repo_name}"
+            "SELECT last_synced_at, last_synced_sha FROM sync_state WHERE repo = %(repo)s",
+            parameters={"repo": repo_name},
         )
 
         if result.result_rows:
