@@ -57,8 +57,27 @@ def get_sync_state(repo_name : str):
 @task(retries=3, retry_delay_seconds=[10, 30, 90])
 def fetch_commits(repo_name : str, since_datetime : datetime):
 
-    client = get_clickhouse_client()
+    log = get_run_logger()
 
-    repo_handle = get_repo_handle(client, repo_name)
+    with github_session() as gh:
+        try:
+            repo_handle = get_repo_handle(gh, repo_name)
 
-    commits = repo_handle.get_commits(since=since_datetime)
+            if since_datetime is None:
+                commits = repo_handle.get_commits()
+            else:
+                commits = repo_handle.get_commits(since=since_datetime)
+
+            results = []
+
+            for commit in commits:
+                results.append(extract_commit_data(commit))
+
+            log.info(f"{repo_name} -> {len(results)} commits fetched (since={since_datetime})")
+            return results
+        
+        except RateLimitExceededException:
+            reset_time = gh.get_rate_limit().core.reset
+            log.warning(f"Rate limit hit for {repo_name}, resets at {reset_time}: letting Prefect retry")
+            raise
+
