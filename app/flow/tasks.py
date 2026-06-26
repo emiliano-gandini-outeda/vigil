@@ -81,3 +81,15 @@ def fetch_commits(repo_name : str, since_datetime : datetime):
             log.warning(f"Rate limit hit for {repo_name}, resets at {reset_time}: letting Prefect retry")
             raise
 
+
+@task
+def transform_commit(raw_commit, repo_name):
+    return Commit.Schema(
+        repo=repo_name,
+        sha=raw_commit["sha"],
+        author_name=raw_commit["author_name"],
+        author_email=raw_commit["author_email"],
+        author_login=raw_commit["author_login"],
+        committed_at=raw_commit["committed_at"],
+        message=raw_commit["message"],
+    )
